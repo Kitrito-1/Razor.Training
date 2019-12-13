@@ -20,7 +20,7 @@
     </div>
     <div class="form-group row">
         <label class="col-sm-2 col-form-label" asp-for="Employee.Sex"></label>
-        <select class="col-sm-6 form-control" asp-for="Employee.Sex" asp-items="@Html.GetEnumSelectList(typeof(Sex))"></select>
+        <select class="col-sm-6 form-control" asp-for="Employee.Sex" asp-items="@Html.GetEnumSelectList(typeof(Razor.Training.Sex))"></select>
         <span class="col-sm-4 col-form-label text-danger" asp-validation-for="Employee.Sex"></span>
     </div>
     <div class="form-group row">

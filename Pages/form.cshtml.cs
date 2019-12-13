@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.ComponentModel.DataAnnotations;
 using System.Threading;
+using System.Data.SqlClient;
+using System.Text;
 
 namespace Razor.Training
 {
