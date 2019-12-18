@@ -10,6 +10,10 @@ namespace Razor.Training
 
     public class Employee
     {
+        public Employee()
+        {
+        }
+
         [StringLength(10, ErrorMessage = "{0} 長度必須介於2與10字元之間", MinimumLength = 2)]
         [Required(ErrorMessage = "{0} 必須輸入")]
         [Display(Name = "姓名", Prompt = "請輸入姓名")]

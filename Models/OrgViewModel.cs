@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations;
+using System.Data;
 using System.Data.SqlClient;
 using System.Text;
 
@@ -22,6 +23,8 @@ namespace Razor.Training.Models
 
     public class Employee
     {
+        public Guid Id { get; set; }
+
         [StringLength(10, ErrorMessage = "{0} 長度必須介於2與10字元之間", MinimumLength = 2)]
         [Required(ErrorMessage = "{0} 必須輸入")]
         [Display(Name = "姓名", Prompt = "請輸入姓名")]
@@ -62,7 +65,7 @@ namespace Razor.Training.Models
             {
                 using (SqlCommand dc = connection.CreateCommand())
                 {
-                    dc.CommandText = @"SELECT TOP 10 dgpersonal.namezhtw, dgemployee.empno, dgemployee.enterdate, dgemployee.email, dgpersonal.sex , dgemployee.positionid
+                    dc.CommandText = @"SELECT TOP 15 dgpersonal.namezhtw, dgemployee.id, dgemployee.empno, dgemployee.enterdate, dgemployee.email, dgpersonal.sex , dgemployee.positionid
                                        FROM dgemployee 
                                        INNER JOIN dgpersonal ON dgpersonal.id = dgemployee.personid 
                                        WHERE LEN(dgemployee.empno) = 6 AND dgemployee.empno LIKE '100%' 
@@ -73,7 +76,7 @@ namespace Razor.Training.Models
                     {
                         while (reader.Read())
                         {
-                            result.Add(new Employee() { Name = reader["namezhtw"].ToString(), Empno = reader["empno"].ToString(), EnterDate = DateTime.Parse(reader["enterdate"].ToString()), Email = reader["email"].ToString(), Sex = String.Compare(reader["sex"].ToString(), "M", true) == 0 ? Sex.male : Sex.Female, PositionId = !String.IsNullOrEmpty(reader["positionid"].ToString()) ? Guid.Parse(reader["positionid"].ToString()) : default(Guid)});
+                            result.Add(new Employee() {Id = Guid.Parse(reader["id"].ToString()), Name = reader["namezhtw"].ToString(), Empno = reader["empno"].ToString(), EnterDate = DateTime.Parse(reader["enterdate"].ToString()), Email = reader["email"].ToString(), Sex = String.Compare(reader["sex"].ToString(), "M", true) == 0 ? Sex.male : Sex.Female, PositionId = !String.IsNullOrEmpty(reader["positionid"].ToString()) ? Guid.Parse(reader["positionid"].ToString()) : default(Guid)});
                         }
                     }
 
@@ -108,6 +111,46 @@ namespace Razor.Training.Models
             }
 
             return result;
+        }
+
+        public void UpdateEmployeeData(Guid eid)
+        {
+            using (SqlConnection connection = new SqlConnection(new SqlConnectionStringBuilder() { DataSource = "129.129.1.90", UserID = "smoothnetdev", Password = "smoothnetdev", InitialCatalog = "SmoothEnterprise33_Dev", }.ConnectionString))
+            {
+                using (SqlCommand dc = connection.CreateCommand())
+                {
+                    dc.CommandText = @"UPDATE dgpersonal SET namezhtw = namezhtw + '(更新)' FROM dgpersonal
+                                       INNER JOIN dgemployee ON dgemployee.personid = dgpersonal.id
+                                       WHERE dgemployee.id = @id ";
+
+                    dc.Parameters.Clear();
+                    dc.Parameters.Add("@id",SqlDbType.UniqueIdentifier).Value = eid;
+
+                    dc.Connection.Open();
+                    dc.ExecuteNonQuery();
+                    dc.Connection.Close();
+                }
+            }
+        }
+
+        public void RollBackEmployeeData(Guid eid)
+        {
+            using (SqlConnection connection = new SqlConnection(new SqlConnectionStringBuilder() { DataSource = "129.129.1.90", UserID = "smoothnetdev", Password = "smoothnetdev", InitialCatalog = "SmoothEnterprise33_Dev", }.ConnectionString))
+            {
+                using (SqlCommand dc = connection.CreateCommand())
+                {
+                    dc.CommandText = @"UPDATE dgpersonal SET namezhtw = REPLACE(namezhtw,'(更新)','') FROM dgpersonal
+                                       INNER JOIN dgemployee ON dgemployee.personid = dgpersonal.id
+                                       WHERE dgemployee.id = @id ";
+
+                    dc.Parameters.Clear();
+                    dc.Parameters.Add("@id", SqlDbType.UniqueIdentifier).Value = eid;
+
+                    dc.Connection.Open();
+                    dc.ExecuteNonQuery();
+                    dc.Connection.Close();
+                }
+            }
         }
     }
 }

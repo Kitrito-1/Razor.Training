@@ -4,19 +4,40 @@
     //var employeeschema = (Razor.Training.Models.Employee)Activator.CreateInstance((Model.Employees.GetType().GetGenericArguments().Single()));
     var employeeschema = new Razor.Training.Models.Employee();
     var employees = Model.Employees;
+    var positions = Model.Positions;
 
-    var emp2 = (from emp in Model.Employees
-                join pos in Model.Position on emp.PositionId equals pos.Id into a
-                from b in a.DefaultIfEmpty(new Position())
-                select new { Empno = emp.Empno, Name = emp.Name, Sex = emp.Sex, EnterDate = emp.EnterDate, Email = emp.Email, Position = b.Name }).ToList();
-
-    //var emp2 = (from emp in Model.Employees
-    //            join pos in Model.Position on emp.PositionId equals pos.Id into a
-    //            from b in a.DefaultIfEmpty(new Position())
-    //            select new { Empno = b.Id, Name = b.Name, Sex = b.Id, EnterDate = b.Id, Email = b.Id, Position = b.Name }).ToList();
-
+    var datalist = (from emp in employees
+                    join pos in positions on emp.PositionId equals pos.Id into a
+                    from b in a.DefaultIfEmpty(new Position())
+                    select new { Eid = emp.Id, Empno = emp.Empno, Name = emp.Name, Sex = emp.Sex, EnterDate = emp.EnterDate, Email = emp.Email, Position = b.Name }).ToList();
 }
 
+<div>
+    <p>TempData參數:@TempData["Text"]</p>
+</div>
+<form method="post" style="margin:1rem 0;">
+    <div class="row">
+        <div class="col-4">
+            <div class="row">
+                <div class="col">
+                    <label asp-for="Search"></label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <input class="form-control" asp-for="Search" />
+                </div>
+            </div>
+        </div>
+        <div class="col-1">
+            <div class="row align-items-end" style="height: 100%;">
+                <div class="col" style="padding:0;">
+                    <button class="btn btn-primary parform-controlform-control" asp-page-handler="Query">Query</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
 <div class="table-responsive">
     <table class="table">
         <thead>
@@ -27,50 +48,58 @@
                 <td class="align-middle"><label asp-for="@employeeschema.EnterDate"></label></td>
                 <td class="align-middle"><label asp-for="@employeeschema.Email"></label></td>
                 <td class="align-middle"><label asp-for="@employeeschema.PositionId"></label></td>
+                <td class="align-middle"><label>操作</label></td>
             </tr>
         </thead>
         <tbody>
-            @for (int i = 0; i < emp2.Count; i++)
+            @for (int i = 0; i < datalist.Count; i++)
             {
-                var employee = emp2[i];
+                var data = datalist[i];
 
-                <td class="align-middle">@employee.Name</td>
                 <tr>
-                    <td class="align-middle">@employee.Empno</td>
-                    <td class="align-middle">@employee.Name</td>
-                    <td class="align-middle">@employee.Sex</td>
-                    <td class="align-middle">@employee.EnterDate.ToShortDateString()</td>
-                    <td class="align-middle">@employee.Email</td>
-                    <td class="align-middle">@employee.Position</td>
+                    <td class="align-middle">@data.Empno</td>
+                    <td class="align-middle">@data.Name</td>
+                    <td class="align-middle">@data.Sex</td>
+                    <td class="align-middle">@data.EnterDate.ToShortDateString()</td>
+                    <td class="align-middle">@data.Email</td>
+                    <td class="align-middle">@data.Position</td>
+                    <td class="align-middle">
+                        <form method="post">
+                            <button class="btn btn-danger parform-controlform-control" asp-page-handler="Update" asp-route-eid="@data.Eid">Update</button>
+                            <button class="btn btn-danger parform-controlform-control" asp-page-handler="RollBack" asp-route-eid="@data.Eid">RollBack</button>
+                        </form>
+                    </td>
                 </tr>
             }
         </tbody>
     </table>
 </div>
 
-
-
-<div class="row">
-    <div class="col-2"><label asp-for="@employeeschema.Empno"></label></div>
-    <div class="col-2"><label asp-for="@employeeschema.Name"></label></div>
-    <div class="col-2"><label asp-for="@employeeschema.Sex"></label></div>
-    <div class="col-2"><label asp-for="@employeeschema.EnterDate"></label></div>
-    <div class="col-2"><label asp-for="@employeeschema.Email"></label></div>
-    <div class="col-2"><label asp-for="@employeeschema.PositionId"></label></div>
-</div>
-
-@for (int i = 0; i < emp2.Count; i++)
-{
-    var employee = emp2[i];
-
-    <div class="row">
-        <div class="col-2">@employee.Empno</div>
-        <div class="col-2">@employee.Name</div>
-        <div class="col-2">@employee.Sex</div>
-        <div class="col-2">@employee.EnterDate.ToShortDateString()</div>
-        <div class="col-2" style="text-overflow: ellipsis;overflow: hidden;">@employee.Email</div>
-        <div class="col-2">@employee.Position</div>
+@*<div class="row">
+        <div class="col-2"><label asp-for="@employeeschema.Empno"></label></div>
+        <div class="col-2"><label asp-for="@employeeschema.Name"></label></div>
+        <div class="col-2"><label asp-for="@employeeschema.Sex"></label></div>
+        <div class="col-2"><label asp-for="@employeeschema.EnterDate"></label></div>
+        <div class="col-2"><label asp-for="@employeeschema.Email"></label></div>
+        <div class="col-2"><label asp-for="@employeeschema.PositionId"></label></div>
     </div>
+
+    @for (int i = 0; i < datalist.Count; i++)
+    {
+        var data = datalist[i];
+
+        <div class="row">
+            <div class="col-2">@data.Empno</div>
+            <div class="col-2">@data.Name</div>
+            <div class="col-2">@data.Sex</div>
+            <div class="col-2">@data.EnterDate.ToShortDateString()</div>
+            <div class="col-2" style="text-overflow: ellipsis;overflow: hidden;">@data.Email</div>
+            <div class="col-2">@data.Position</div>
+        </div>
+    }*@
+
+
+@section Scripts
+{
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
-
-
