@@ -34,15 +34,43 @@
             {
                 var employee = emp2[i];
 
-            <tr>
-                <td class="align-middle">@employee.Empno</td>
                 <td class="align-middle">@employee.Name</td>
-                <td class="align-middle">@employee.Sex</td>
-                <td class="align-middle">@employee.EnterDate</td>
-                <td class="align-middle">@employee.Email</td>
-                <td class="align-middle">@employee.Position</td>
-            </tr>
+                <tr>
+                    <td class="align-middle">@employee.Empno</td>
+                    <td class="align-middle">@employee.Name</td>
+                    <td class="align-middle">@employee.Sex</td>
+                    <td class="align-middle">@employee.EnterDate.ToShortDateString()</td>
+                    <td class="align-middle">@employee.Email</td>
+                    <td class="align-middle">@employee.Position</td>
+                </tr>
             }
         </tbody>
     </table>
 </div>
+
+
+
+<div class="row">
+    <div class="col-2"><label asp-for="@employeeschema.Empno"></label></div>
+    <div class="col-2"><label asp-for="@employeeschema.Name"></label></div>
+    <div class="col-2"><label asp-for="@employeeschema.Sex"></label></div>
+    <div class="col-2"><label asp-for="@employeeschema.EnterDate"></label></div>
+    <div class="col-2"><label asp-for="@employeeschema.Email"></label></div>
+    <div class="col-2"><label asp-for="@employeeschema.PositionId"></label></div>
+</div>
+
+@for (int i = 0; i < emp2.Count; i++)
+{
+    var employee = emp2[i];
+
+    <div class="row">
+        <div class="col-2">@employee.Empno</div>
+        <div class="col-2">@employee.Name</div>
+        <div class="col-2">@employee.Sex</div>
+        <div class="col-2">@employee.EnterDate.ToShortDateString()</div>
+        <div class="col-2" style="text-overflow: ellipsis;overflow: hidden;">@employee.Email</div>
+        <div class="col-2">@employee.Position</div>
+    </div>
+}
+
+
