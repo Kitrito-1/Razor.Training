@@ -14,10 +14,10 @@ namespace Razor.Training
     {
         public List<Models.Employee> Employees { get; set; }
 
-        public List<Models.Position> Positions { get; set; } 
+        public List<Models.Position> Positions { get; set; }
 
         [BindProperty]
-        [Required]
+        //[Required]
         [Display(Name = "ÃöÁä¦r")]
         public String Search { get; set; }
 
@@ -36,7 +36,8 @@ namespace Razor.Training
         {
             await LoadData();
 
-            Employees = Employees.Where(x => x.Empno.StartsWith(Search)).ToList();
+            if (!String.IsNullOrEmpty(Search))
+                Employees = Employees.Where(x => x.Empno.StartsWith(Search)).ToList();
 
             return Page();
         }

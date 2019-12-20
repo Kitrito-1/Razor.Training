@@ -12,9 +12,9 @@
                     select new { Eid = emp.Id, Empno = emp.Empno, Name = emp.Name, Sex = emp.Sex, EnterDate = emp.EnterDate, Email = emp.Email, Position = b.Name }).ToList();
 }
 
-<div>
+@*<div>
     <p>TempData參數:@TempData["Text"]</p>
-</div>
+</div>*@
 <form method="post" style="margin:1rem 0;">
     <div class="row">
         <div class="col-4">
@@ -29,10 +29,11 @@
                 </div>
             </div>
         </div>
-        <div class="col-1">
+        <div class="col-2">
             <div class="row align-items-end" style="height: 100%;">
                 <div class="col" style="padding:0;">
                     <button class="btn btn-primary parform-controlform-control" asp-page-handler="Query">Query</button>
+                    <a asp-page="/form" asp-route-keyword="Johnny" class="btn btn-info">導頁</a>
                 </div>
             </div>
         </div>
@@ -75,6 +76,8 @@
     </table>
 </div>
 
+
+
 @*<div class="row">
         <div class="col-2"><label asp-for="@employeeschema.Empno"></label></div>
         <div class="col-2"><label asp-for="@employeeschema.Name"></label></div>
@@ -102,4 +105,13 @@
 @section Scripts
 {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+
+    @*<script type="text/javascript">
+                function popupwindow(url, title, w, h) {
+          var left = (screen.width/2)-(w/2);
+          var top = (screen.height/2)-(h/2);
+          return window.open(url, title, 'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=no, resizable=no, copyhistory=no, width='+w+', height='+h+', top='+top+', left='+left);
+        }
+            </script>*@
 }
