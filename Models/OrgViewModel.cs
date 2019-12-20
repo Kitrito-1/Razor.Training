@@ -54,7 +54,7 @@ namespace Razor.Training.Models
     {
         public OrgViewModel()
         {
-            
+
         }
 
         public List<Employee> GetEmployeeData()
@@ -76,7 +76,7 @@ namespace Razor.Training.Models
                     {
                         while (reader.Read())
                         {
-                            result.Add(new Employee() {Id = Guid.Parse(reader["id"].ToString()), Name = reader["namezhtw"].ToString(), Empno = reader["empno"].ToString(), EnterDate = DateTime.Parse(reader["enterdate"].ToString()), Email = reader["email"].ToString(), Sex = String.Compare(reader["sex"].ToString(), "M", true) == 0 ? Sex.male : Sex.Female, PositionId = !String.IsNullOrEmpty(reader["positionid"].ToString()) ? Guid.Parse(reader["positionid"].ToString()) : default(Guid)});
+                            result.Add(new Employee() { Id = Guid.Parse(reader["id"].ToString()), Name = reader["namezhtw"].ToString(), Empno = reader["empno"].ToString(), EnterDate = DateTime.Parse(reader["enterdate"].ToString()), Email = reader["email"].ToString(), Sex = String.Compare(reader["sex"].ToString(), "M", true) == 0 ? Sex.male : Sex.Female, PositionId = !String.IsNullOrEmpty(reader["positionid"].ToString()) ? Guid.Parse(reader["positionid"].ToString()) : default(Guid) });
                         }
                     }
 
@@ -102,7 +102,7 @@ namespace Razor.Training.Models
                     {
                         while (reader.Read())
                         {
-                            result.Add(new Position() { Id = Guid.Parse(reader["id"].ToString()), Code = reader["code"].ToString(), Name = reader["namezhtw"].ToString()});
+                            result.Add(new Position() { Id = Guid.Parse(reader["id"].ToString()), Code = reader["code"].ToString(), Name = reader["namezhtw"].ToString() });
                         }
                     }
 
@@ -124,7 +124,7 @@ namespace Razor.Training.Models
                                        WHERE dgemployee.id = @id ";
 
                     dc.Parameters.Clear();
-                    dc.Parameters.Add("@id",SqlDbType.UniqueIdentifier).Value = eid;
+                    dc.Parameters.Add("@id", SqlDbType.UniqueIdentifier).Value = eid;
 
                     dc.Connection.Open();
                     dc.ExecuteNonQuery();
@@ -133,22 +133,43 @@ namespace Razor.Training.Models
             }
         }
 
-        public void RollBackEmployeeData(Guid eid)
+        public void UpdateEmployeeData(Employee emp)
         {
-            using (SqlConnection connection = new SqlConnection(new SqlConnectionStringBuilder() { DataSource = "129.129.1.90", UserID = "smoothnetdev", Password = "smoothnetdev", InitialCatalog = "SmoothEnterprise33_Dev", }.ConnectionString))
+            if (emp.Id != Guid.Empty)
             {
-                using (SqlCommand dc = connection.CreateCommand())
+                using (SqlConnection connection = new SqlConnection(new SqlConnectionStringBuilder() { DataSource = "129.129.1.90", UserID = "smoothnetdev", Password = "smoothnetdev", InitialCatalog = "SmoothEnterprise33_Dev", }.ConnectionString))
                 {
-                    dc.CommandText = @"UPDATE dgpersonal SET namezhtw = REPLACE(namezhtw,'(更新)','') FROM dgpersonal
-                                       INNER JOIN dgemployee ON dgemployee.personid = dgpersonal.id
-                                       WHERE dgemployee.id = @id ";
+                    using (SqlCommand dc = connection.CreateCommand())
+                    {
+                        String personcolumn = "";
 
-                    dc.Parameters.Clear();
-                    dc.Parameters.Add("@id", SqlDbType.UniqueIdentifier).Value = eid;
+                        if (!String.IsNullOrEmpty(emp.Name))
+                        {
+                            if (!String.IsNullOrEmpty(personcolumn))
+                                personcolumn += ",";
+                            personcolumn += "namezhtw=N'" + emp.Name + "'";
+                        }
 
-                    dc.Connection.Open();
-                    dc.ExecuteNonQuery();
-                    dc.Connection.Close();
+
+                        if (!String.IsNullOrEmpty(personcolumn))
+                            personcolumn += ",";
+                        personcolumn += "sex=N'" + (emp.Sex == Sex.male ? "M" : "F") + "'";
+
+
+                        if (!String.IsNullOrEmpty(personcolumn))
+                        {
+                            dc.CommandText = @"UPDATE dgpersonal SET " + personcolumn + @" FROM dgpersonal
+                                               INNER JOIN dgemployee ON dgemployee.personid = dgpersonal.id
+                                               WHERE dgemployee.id = @id ";
+
+                            dc.Parameters.Clear();
+                            dc.Parameters.Add("@id", SqlDbType.UniqueIdentifier).Value = emp.Id;
+
+                            dc.Connection.Open();
+                            dc.ExecuteNonQuery();
+                            dc.Connection.Close();
+                        }
+                    }
                 }
             }
         }

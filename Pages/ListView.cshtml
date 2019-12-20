@@ -9,12 +9,9 @@
     var datalist = (from emp in employees
                     join pos in positions on emp.PositionId equals pos.Id into a
                     from b in a.DefaultIfEmpty(new Position())
-                    select new { Eid = emp.Id, Empno = emp.Empno, Name = emp.Name, Sex = emp.Sex, EnterDate = emp.EnterDate, Email = emp.Email, Position = b.Name }).ToList();
+                    select new { Id = emp.Id, Empno = emp.Empno, Name = emp.Name, Sex = emp.Sex, EnterDate = emp.EnterDate, Email = emp.Email, Position = b.Name, PositionId = emp.PositionId }).ToList();
 }
 
-@*<div>
-    <p>TempData參數:@TempData["Text"]</p>
-</div>*@
 <form method="post" style="margin:1rem 0;">
     <div class="row">
         <div class="col-4">
@@ -39,6 +36,8 @@
         </div>
     </div>
 </form>
+
+<p>◎Table排版</p>
 <div class="table-responsive">
     <table class="table">
         <thead>
@@ -66,8 +65,7 @@
                     <td class="align-middle">@data.Position</td>
                     <td class="align-middle">
                         <form method="post">
-                            <button class="btn btn-danger parform-controlform-control" asp-page-handler="Update" asp-route-eid="@data.Eid">Update</button>
-                            <button class="btn btn-danger parform-controlform-control" asp-page-handler="RollBack" asp-route-eid="@data.Eid">RollBack</button>
+                            <button class="btn btn-danger parform-controlform-control" asp-page-handler="UpdateForTable" asp-route-eid="@data.Id" asp-route-name="@String.Format("{0}{1}", @data.Name, "(更新)")">Update</button>
                         </form>
                     </td>
                 </tr>
@@ -76,36 +74,73 @@
     </table>
 </div>
 
-
-
-@*<div class="row">
-        <div class="col-2"><label asp-for="@employeeschema.Empno"></label></div>
-        <div class="col-2"><label asp-for="@employeeschema.Name"></label></div>
-        <div class="col-2"><label asp-for="@employeeschema.Sex"></label></div>
-        <div class="col-2"><label asp-for="@employeeschema.EnterDate"></label></div>
-        <div class="col-2"><label asp-for="@employeeschema.Email"></label></div>
-        <div class="col-2"><label asp-for="@employeeschema.PositionId"></label></div>
-    </div>
-
-    @for (int i = 0; i < datalist.Count; i++)
-    {
-        var data = datalist[i];
-
-        <div class="row">
-            <div class="col-2">@data.Empno</div>
-            <div class="col-2">@data.Name</div>
-            <div class="col-2">@data.Sex</div>
-            <div class="col-2">@data.EnterDate.ToShortDateString()</div>
-            <div class="col-2" style="text-overflow: ellipsis;overflow: hidden;">@data.Email</div>
-            <div class="col-2">@data.Position</div>
+<p>◎Div排版</p>
+<div style="display:table;width:100%;">
+    <div style="display:table-header-group;">
+        <div style="display:table-row;">
+            <div style="display:table-cell;padding:.75rem;border-top:1px solid #dee2e6;">
+                <label asp-for="@employeeschema.Empno"></label>
+            </div>
+            <div style="display:table-cell;padding:.75rem;border-top:1px solid #dee2e6;">
+                <label asp-for="@employeeschema.Name"></label>
+            </div>
+            <div style="display:table-cell;padding:.75rem;border-top:1px solid #dee2e6;">
+                <label asp-for="@employeeschema.Sex"></label>
+            </div>
+            <div style="display:table-cell;padding:.75rem;border-top:1px solid #dee2e6;">
+                <label asp-for="@employeeschema.EnterDate"></label>
+            </div>
+            <div style="display:table-cell;padding:.75rem;border-top:1px solid #dee2e6;">
+                <label asp-for="@employeeschema.Email"></label>
+            </div>
+            <div style="display:table-cell;padding:.75rem;border-top:1px solid #dee2e6;">
+                <label asp-for="@employeeschema.PositionId"></label>
+            </div>
+            <div style="display:table-cell;padding:.75rem;border-top:1px solid #dee2e6;">
+                <label>操作</label>
+            </div>
         </div>
-    }*@
+    </div>
+    <div style="display:table-row-group;">
+        @for (int i = 0; i < datalist.Count; i++)
+        {
+            var data = datalist[i];
 
+            <form method="post" style="display:table-row;">
+                <input asp-for="@data.Id" type="hidden" />
+                <div style="display:table-cell;padding:.75rem;border-top:1px solid #dee2e6;">
+                    @data.Empno
+                    <input asp-for="@data.Empno" type="hidden" />
+                </div>
+                <div style="display:table-cell;padding:.75rem;border-top:1px solid #dee2e6;">
+                    <input asp-for="@data.Name" class="form-control" />
+                </div>
+                <div style="display:table-cell;padding:.75rem;border-top:1px solid #dee2e6;">
+                    <select asp-for="@data.Sex" class="form-control" asp-items="@Html.GetEnumSelectList(typeof(Razor.Training.Models.Sex))"></select>
+                </div>
+                <div style="display:table-cell;padding:.75rem;border-top:1px solid #dee2e6;">
+                    @data.EnterDate.ToString("yyyy/MM/dd")
+                    <input asp-for="@data.EnterDate" type="hidden" />
+                </div>
+                <div style="display:table-cell;padding:.75rem;border-top:1px solid #dee2e6;">
+                    @data.Email
+                    <input asp-for="@data.Email" type="hidden" />
+                </div>
+                <div style="display:table-cell;padding:.75rem;border-top:1px solid #dee2e6;">
+                    @data.Position
+                    <input asp-for="@data.PositionId" type="hidden" />
+                </div>
+                <div style="display:table-cell;padding:.75rem;border-top:1px solid #dee2e6;">
+                    <button class="btn btn-danger parform-controlform-control" asp-page-handler="Update">Update</button>
+                </div>
+            </form>
+        }
+    </div>
+</div>
 
 @section Scripts
 {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-
 
     @*<script type="text/javascript">
                 function popupwindow(url, title, w, h) {

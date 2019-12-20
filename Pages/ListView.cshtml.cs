@@ -17,7 +17,6 @@ namespace Razor.Training
         public List<Models.Position> Positions { get; set; }
 
         [BindProperty]
-        //[Required]
         [Display(Name = "√ˆ¡‰¶r")]
         public String Search { get; set; }
 
@@ -42,16 +41,16 @@ namespace Razor.Training
             return Page();
         }
 
-        public IActionResult OnPostUpdate(Guid eid)
+        public IActionResult OnPostUpdateForTable(Guid eid,String name)
         {
-            new Models.OrgViewModel().UpdateEmployeeData(eid);
+            new Models.OrgViewModel().UpdateEmployeeData(new Models.Employee() { Id = eid, Name = name});
 
             return RedirectToPage();
         }
 
-        public IActionResult OnPostRollBack(Guid eid)
+        public IActionResult OnPostUpdate(Models.Employee data)
         {
-            new Models.OrgViewModel().RollBackEmployeeData(eid);
+            new Models.OrgViewModel().UpdateEmployeeData(data);
 
             return RedirectToPage();
         }
