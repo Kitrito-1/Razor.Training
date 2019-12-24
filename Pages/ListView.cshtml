@@ -11,7 +11,7 @@
                     from b in a.DefaultIfEmpty(new Position())
                     select new { Id = emp.Id, Empno = emp.Empno, Name = emp.Name, Sex = emp.Sex, EnterDate = emp.EnterDate, Email = emp.Email, Position = b.Name, PositionId = emp.PositionId }).ToList();
 }
-
+<span class="glyphicon glyphicon-cloud"></span>
 <form method="post" style="margin:1rem 0;">
     <div class="row">
         <div class="col-4">
@@ -78,25 +78,25 @@
 <div style="display:table;width:100%;">
     <div style="display:table-header-group;">
         <div style="display:table-row;">
-            <div style="display:table-cell;padding:.75rem;border-top:1px solid #dee2e6;">
+            <div class="p-3 border-top" style="display:table-cell;">
                 <label asp-for="@employeeschema.Empno"></label>
             </div>
-            <div style="display:table-cell;padding:.75rem;border-top:1px solid #dee2e6;">
+            <div class="p-3 border-top" style="display:table-cell;">
                 <label asp-for="@employeeschema.Name"></label>
             </div>
-            <div style="display:table-cell;padding:.75rem;border-top:1px solid #dee2e6;">
+            <div class="p-3 border-top" style="display:table-cell;">
                 <label asp-for="@employeeschema.Sex"></label>
             </div>
-            <div style="display:table-cell;padding:.75rem;border-top:1px solid #dee2e6;">
+            <div class="p-3 border-top" style="display:table-cell;">
                 <label asp-for="@employeeschema.EnterDate"></label>
             </div>
-            <div style="display:table-cell;padding:.75rem;border-top:1px solid #dee2e6;">
+            <div class="p-3 border-top" style="display:table-cell;">
                 <label asp-for="@employeeschema.Email"></label>
             </div>
-            <div style="display:table-cell;padding:.75rem;border-top:1px solid #dee2e6;">
+            <div class="p-3 border-top" style="display:table-cell;">
                 <label asp-for="@employeeschema.PositionId"></label>
             </div>
-            <div style="display:table-cell;padding:.75rem;border-top:1px solid #dee2e6;">
+            <div class="p-3 border-top" style="display:table-cell;">
                 <label>操作</label>
             </div>
         </div>
@@ -108,29 +108,29 @@
 
             <form method="post" style="display:table-row;">
                 <input asp-for="@data.Id" type="hidden" />
-                <div style="display:table-cell;padding:.75rem;border-top:1px solid #dee2e6;">
+                <div class="p-3 border-top" style="display:table-cell;">
                     @data.Empno
                     <input asp-for="@data.Empno" type="hidden" />
                 </div>
-                <div style="display:table-cell;padding:.75rem;border-top:1px solid #dee2e6;">
+                <div class="p-3 border-top" style="display:table-cell;">
                     <input asp-for="@data.Name" class="form-control" />
                 </div>
-                <div style="display:table-cell;padding:.75rem;border-top:1px solid #dee2e6;">
+                <div class="p-3 border-top" style="display:table-cell;">
                     <select asp-for="@data.Sex" class="form-control" asp-items="@Html.GetEnumSelectList(typeof(Razor.Training.Models.Sex))"></select>
                 </div>
-                <div style="display:table-cell;padding:.75rem;border-top:1px solid #dee2e6;">
+                <div class="p-3 border-top" style="display:table-cell;">
                     @data.EnterDate.ToString("yyyy/MM/dd")
                     <input asp-for="@data.EnterDate" type="hidden" />
                 </div>
-                <div style="display:table-cell;padding:.75rem;border-top:1px solid #dee2e6;">
+                <div class="p-3 border-top" style="display:table-cell;">
                     @data.Email
                     <input asp-for="@data.Email" type="hidden" />
                 </div>
-                <div style="display:table-cell;padding:.75rem;border-top:1px solid #dee2e6;">
+                <div class="p-3 border-top" style="display:table-cell;">
                     @data.Position
                     <input asp-for="@data.PositionId" type="hidden" />
                 </div>
-                <div style="display:table-cell;padding:.75rem;border-top:1px solid #dee2e6;">
+                <div class="p-3 border-top" style="display:table-cell;">
                     <button class="btn btn-danger parform-controlform-control" asp-page-handler="Update">Update</button>
                 </div>
             </form>
