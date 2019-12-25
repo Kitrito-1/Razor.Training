@@ -184,3 +184,4 @@ C:\Users\Johnny\source\repos\Razor.Training\Razor.Training\bin\Debug\netcoreapp3
 C:\Users\Johnny\source\repos\Razor.Training\Razor.Training\obj\Debug\netcoreapp3.0\Razor\Pages\ListView.cshtml.g.cs
 C:\Users\Johnny\source\repos\Razor.Training\Razor.Training\obj\Debug\netcoreapp3.0\Razor\Pages\API\empinfo.cshtml.g.cs
 C:\Users\Johnny\source\repos\Razor.Training\Razor.Training\obj\Debug\netcoreapp3.0\Razor.Training.MvcApplicationPartsAssemblyInfo.cache
+C:\Users\Johnny\source\repos\Razor.Training\Razor.Training\obj\Debug\netcoreapp3.0\Razor\Pages\EditForm.cshtml.g.cs

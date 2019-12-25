@@ -65,7 +65,8 @@
                     <td class="align-middle">@data.Position</td>
                     <td class="align-middle">
                         <form method="post">
-                            <button class="btn btn-danger parform-controlform-control" asp-page-handler="UpdateForTable" asp-route-eid="@data.Id" asp-route-name="@String.Format("{0}{1}", @data.Name, "(更新)")">Update</button>
+                            <button class="btn btn-danger" asp-page-handler="UpdateForTable" asp-route-eid="@data.Id" asp-route-name="@String.Format("{0}{1}", @data.Name, "(更新)")">Update</button>
+                            <button class="btn btn-danger" onclick="popupwindow('/EditForm?eid=@data.Id', '編輯 @data.Name 的個人資料', 800, 600);return false;">編輯</button>
                         </form>
                     </td>
                 </tr>
@@ -131,7 +132,7 @@
                     <input asp-for="@data.PositionId" type="hidden" />
                 </div>
                 <div class="p-3 border-top" style="display:table-cell;">
-                    <button class="btn btn-danger parform-controlform-control" asp-page-handler="Update">Update</button>
+                    <button class="btn btn-danger form-control" asp-page-handler="Update">Update</button>
                 </div>
             </form>
         }
@@ -142,11 +143,11 @@
 {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 
-    @*<script type="text/javascript">
-                function popupwindow(url, title, w, h) {
-          var left = (screen.width/2)-(w/2);
-          var top = (screen.height/2)-(h/2);
-          return window.open(url, title, 'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=no, resizable=no, copyhistory=no, width='+w+', height='+h+', top='+top+', left='+left);
+    <script type="text/javascript">
+        function popupwindow(url, title, w, h) {
+            var left = (screen.width / 2) - (w / 2);
+            var top = (screen.height / 2) - (h / 2);
+            return window.open(url, title, 'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=no, resizable=no, copyhistory=no, width=' + w + ', height=' + h + ', top=' + top + ', left=' + left);
         }
-            </script>*@
+    </script>
 }
