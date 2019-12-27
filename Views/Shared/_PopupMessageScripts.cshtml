@@ -1,0 +1,14 @@
+﻿<script>
+    $(function () {
+        var validatemsg = '';
+        $(".validatemessage").each(function (index) {
+            if ($(this).val() != '')
+                validatemsg += $(this).val();
+        });
+
+        if (validatemsg != '') {
+            $('#ErrorModal .modal-body').html(validatemsg);
+            $('#ErrorModal').modal('show');
+        }
+    });
+</script>

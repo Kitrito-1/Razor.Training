@@ -15,10 +15,34 @@ namespace Razor.Training
         public String ValidateMessage { get; set; }
 
         [BindProperty]
-        public String InitDate { get => Employee.Init.Item1.HasValue ? Employee.Init.Item1.Value.ToString("yyyy/MM/dd HH:mm:ss") : "" ; set => Employee.Init = (!String.IsNullOrEmpty(value) ? DateTime.Parse(value) : default(DateTime), InitUid); }
+        public String InitDate 
+        { 
+            get => Employee.Init.Item1.HasValue ? Employee.Init.Item1.Value.ToString("yyyy/MM/dd HH:mm:ss") : "" ;
+            set
+            {
+                DateTime? datetime = null;
+
+                if (!String.IsNullOrEmpty(value))
+                    datetime = DateTime.Parse(value);
+                
+                Employee.Init = (datetime, InitUid);
+            }
+        }
 
         [BindProperty]
-        public Guid? InitUid { get => Employee.Init.Item2; set => Employee.Init = (!String.IsNullOrEmpty(InitDate) ? DateTime.Parse(InitDate) : default(DateTime), value); }
+        public Guid? InitUid 
+        { 
+            get => Employee.Init.Item2;
+            set
+            {
+                DateTime? datetime = null;
+
+                if (!String.IsNullOrEmpty(InitDate))
+                    datetime = DateTime.Parse(InitDate);
+
+                Employee.Init = (datetime, value);
+            }
+        }
 
         public void OnGet(Guid eid)
         {
@@ -41,6 +65,7 @@ namespace Razor.Training
 
                 return Page();
             }
+
             new Models.OrgViewModel().UpdateEmployeeData(Employee);
 
             return Content(@"<script>window.close();opener.location.reload();</script>", "text/html");
