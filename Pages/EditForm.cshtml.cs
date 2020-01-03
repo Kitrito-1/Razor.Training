@@ -53,7 +53,7 @@ namespace Razor.Training
         {
             if(!ModelState.IsValid)
             {
-                 foreach(var e1 in ModelState.Values)
+                foreach(var e1 in ModelState.Values)
                 {
                     foreach(var e2 in e1.Errors)
                     {

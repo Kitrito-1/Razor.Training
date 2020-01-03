@@ -9,7 +9,7 @@ using System.Text;
 
 namespace Razor.Training.Models
 {
-    public enum Sex { male = 1, Female = 2 }
+    public enum Sex {none = 0, male = 1, Female = 2 }
 
 
     public class Position
@@ -23,6 +23,8 @@ namespace Razor.Training.Models
 
     public class Employee
     {
+        public bool Check { get; set; }
+
         public Guid Id { get; set; }
 
         [StringLength(10, ErrorMessage = "欄位 {0} 長度必須介於2與10字元之間", MinimumLength = 2)]
@@ -33,7 +35,7 @@ namespace Razor.Training.Models
         [Display(Name = "性別")]
         public Sex Sex { get; set; }
 
-        [StringLength(10, ErrorMessage = "欄位 {0} 長度必須介於6與10字元之間", MinimumLength = 6)]
+        [StringLength(30, ErrorMessage = "欄位 {0} 長度必須介於2與30字元之間", MinimumLength = 2)]
         [Required(ErrorMessage = "欄位 {0} 必須輸入")]
         [Display(Name = "員工編號", Prompt = "請輸入員工編號")]
         public String Empno { get; set; }
@@ -66,22 +68,23 @@ namespace Razor.Training.Models
         {
             List<Employee> result = new List<Employee>();
 
-            using (SqlConnection connection = new SqlConnection(new SqlConnectionStringBuilder() { DataSource = "129.129.1.90", UserID = "smoothnetdev", Password = "smoothnetdev", InitialCatalog = "SmoothEnterprise33_Dev", }.ConnectionString))
+            using (SqlConnection connection = new SqlConnection(new SqlConnectionStringBuilder() { DataSource = "DG-A45V", IntegratedSecurity = true, PersistSecurityInfo = false, InitialCatalog = "恆天大陸", }.ConnectionString))
+            //using (SqlConnection connection = new SqlConnection(new SqlConnectionStringBuilder() { DataSource = "129.129.1.90", UserID = "smoothnetdev", Password = "smoothnetdev", InitialCatalog = "SmoothEnterprise33_Dev", }.ConnectionString))
             {
                 using (SqlCommand dc = connection.CreateCommand())
                 {
-                    dc.CommandText = @"SELECT TOP 15 dgpersonal.namezhtw, dgemployee.id, dgemployee.empno, dgemployee.enterdate, dgemployee.email, dgpersonal.sex , dgemployee.positionid
+                    dc.CommandText = @"SELECT TOP 15 dgpersonal.namezhtw, dgemployee.id, dgemployee.empno, dgemployee.enterdate, dgemployee.email, dgpersonal.sex , dgemployee.positionid, dgpersonal.autobiography
                                        FROM dgemployee 
                                        INNER JOIN dgpersonal ON dgpersonal.id = dgemployee.personid 
-                                       WHERE LEN(dgemployee.empno) = 6 AND dgemployee.empno LIKE '100%' 
-                                       ORDER BY dgemployee.empno ";
+                                       WHERE dgemployee.empno NOT LIKE '100%' 
+                                       ORDER BY dgemployee.initdate desc, dgemployee.empno ";
 
                     dc.Connection.Open();
                     using (SqlDataReader reader = dc.ExecuteReader())
                     {
                         while (reader.Read())
                         {
-                            result.Add(new Employee() { Id = Guid.Parse(reader["id"].ToString()), Name = reader["namezhtw"].ToString(), Empno = reader["empno"].ToString(), EnterDate = DateTime.Parse(reader["enterdate"].ToString()), Email = reader["email"].ToString(), Sex = String.Compare(reader["sex"].ToString(), "M", true) == 0 ? Sex.male : Sex.Female, PositionId = !String.IsNullOrEmpty(reader["positionid"].ToString()) ? Guid.Parse(reader["positionid"].ToString()) : default(Guid) });
+                            result.Add(new Employee() { Id = Guid.Parse(reader["id"].ToString()), Name = reader["namezhtw"].ToString(), Empno = reader["empno"].ToString(), EnterDate = DateTime.Parse(reader["enterdate"].ToString()), Email = reader["email"].ToString(), Sex = String.Compare(reader["sex"].ToString(), "M", true) == 0 ? Sex.male : Sex.Female, PositionId = !String.IsNullOrEmpty(reader["positionid"].ToString()) ? Guid.Parse(reader["positionid"].ToString()) : default(Guid), Autobiography = reader["autobiography"].ToString(), });
                         }
                     }
 
@@ -96,7 +99,8 @@ namespace Razor.Training.Models
         {
             Employee result = null;
 
-            using (SqlConnection connection = new SqlConnection(new SqlConnectionStringBuilder() { DataSource = "129.129.1.90", UserID = "smoothnetdev", Password = "smoothnetdev", InitialCatalog = "SmoothEnterprise33_Dev", }.ConnectionString))
+            using (SqlConnection connection = new SqlConnection(new SqlConnectionStringBuilder() { DataSource = "DG-A45V", IntegratedSecurity = true, PersistSecurityInfo = false, InitialCatalog = "恆天大陸", }.ConnectionString))
+            //using (SqlConnection connection = new SqlConnection(new SqlConnectionStringBuilder() { DataSource = "129.129.1.90", UserID = "smoothnetdev", Password = "smoothnetdev", InitialCatalog = "SmoothEnterprise33_Dev", }.ConnectionString))
             {
                 using (SqlCommand dc = connection.CreateCommand())
                 {
@@ -147,7 +151,8 @@ namespace Razor.Training.Models
         {
             var result = new List<Position>();
 
-            using (SqlConnection connection = new SqlConnection(new SqlConnectionStringBuilder() { DataSource = "129.129.1.90", UserID = "smoothnetdev", Password = "smoothnetdev", InitialCatalog = "SmoothEnterprise33_Dev", }.ConnectionString))
+            using (SqlConnection connection = new SqlConnection(new SqlConnectionStringBuilder() { DataSource = "DG-A45V", IntegratedSecurity = true, PersistSecurityInfo = false, InitialCatalog = "恆天大陸", }.ConnectionString))
+            //using (SqlConnection connection = new SqlConnection(new SqlConnectionStringBuilder() { DataSource = "129.129.1.90", UserID = "smoothnetdev", Password = "smoothnetdev", InitialCatalog = "SmoothEnterprise33_Dev", }.ConnectionString))
             {
                 using (SqlCommand dc = connection.CreateCommand())
                 {
@@ -171,7 +176,8 @@ namespace Razor.Training.Models
 
         public void UpdateEmployeeData(Guid eid)
         {
-            using (SqlConnection connection = new SqlConnection(new SqlConnectionStringBuilder() { DataSource = "129.129.1.90", UserID = "smoothnetdev", Password = "smoothnetdev", InitialCatalog = "SmoothEnterprise33_Dev", }.ConnectionString))
+            using (SqlConnection connection = new SqlConnection(new SqlConnectionStringBuilder() { DataSource = "DG-A45V", IntegratedSecurity = true, PersistSecurityInfo = false, InitialCatalog = "恆天大陸", }.ConnectionString))
+            //using (SqlConnection connection = new SqlConnection(new SqlConnectionStringBuilder() { DataSource = "129.129.1.90", UserID = "smoothnetdev", Password = "smoothnetdev", InitialCatalog = "SmoothEnterprise33_Dev", }.ConnectionString))
             {
                 using (SqlCommand dc = connection.CreateCommand())
                 {
@@ -193,7 +199,8 @@ namespace Razor.Training.Models
         {
             if (emp.Id != Guid.Empty)
             {
-                using (SqlConnection connection = new SqlConnection(new SqlConnectionStringBuilder() { DataSource = "129.129.1.90", UserID = "smoothnetdev", Password = "smoothnetdev", InitialCatalog = "SmoothEnterprise33_Dev", }.ConnectionString))
+                using (SqlConnection connection = new SqlConnection(new SqlConnectionStringBuilder() { DataSource = "DG-A45V", IntegratedSecurity = true, PersistSecurityInfo = false, InitialCatalog = "恆天大陸", }.ConnectionString))
+                //using (SqlConnection connection = new SqlConnection(new SqlConnectionStringBuilder() { DataSource = "129.129.1.90", UserID = "smoothnetdev", Password = "smoothnetdev", InitialCatalog = "SmoothEnterprise33_Dev", }.ConnectionString))
                 {
                     using (SqlCommand dc = connection.CreateCommand())
                     {
@@ -231,5 +238,94 @@ namespace Razor.Training.Models
                 }
             }
         }
+
+        public void DeleteEmployeeData(Guid eid)
+        {
+            using (SqlConnection connection = new SqlConnection(new SqlConnectionStringBuilder() { DataSource = "DG-A45V", IntegratedSecurity = true, PersistSecurityInfo = false, InitialCatalog = "恆天大陸", }.ConnectionString))
+            {
+                using (SqlCommand dc = connection.CreateCommand())
+                {
+                    object value;
+                    String personid = "";
+
+                    dc.CommandText = @"SELECT personid FROM dgemployee WHERE dgemployee.id = @id ";
+
+                    dc.Parameters.Clear();
+                    dc.Parameters.Add("@id", SqlDbType.UniqueIdentifier).Value = eid;
+
+                    dc.Connection.Open();
+
+                    value = dc.ExecuteScalar();
+
+                    if (value != null)
+                    {
+                        personid = value.ToString();
+                    }
+
+                    dc.Connection.Close();
+
+                    dc.CommandText = @"DELETE dgemployee WHERE dgemployee.id = @id ";
+
+                    dc.Parameters.Clear();
+                    dc.Parameters.Add("@id", SqlDbType.UniqueIdentifier).Value = eid;
+
+                    dc.Connection.Open();
+                    dc.ExecuteNonQuery();
+                    dc.Connection.Close();
+
+                    if (!String.IsNullOrEmpty(personid))
+                    {
+                        dc.CommandText = @"DELETE dgpersonal FROM dgpersonal WHERE id = @personid ";
+
+                        dc.Parameters.Clear();
+                        dc.Parameters.Add("@personid", SqlDbType.UniqueIdentifier).Value = Guid.Parse(personid);
+
+                        dc.Connection.Open();
+                        dc.ExecuteNonQuery();
+                        dc.Connection.Close();
+                    }
+                }
+            }
+        }
+
+
+        public void InsertEmployeeData(Employee emp)
+        {
+            if (emp.Id == Guid.Empty)
+                emp.Id = Guid.NewGuid();
+
+            var personid = Guid.NewGuid();
+
+            using (SqlConnection connection = new SqlConnection(new SqlConnectionStringBuilder() { DataSource = "DG-A45V", IntegratedSecurity = true, PersistSecurityInfo = false, InitialCatalog = "恆天大陸", }.ConnectionString))
+            {
+                using (SqlCommand dc = connection.CreateCommand())
+                {
+                    dc.CommandText = @"INSERT INTO dgpersonal(id,idno,name,namezhtw,namezhcn) VALUES (@id,@idno,@name,@namezhtw,@namezhcn) ";
+
+                    dc.Parameters.Clear();
+                    dc.Parameters.Add("@id", SqlDbType.UniqueIdentifier).Value = personid;
+                    dc.Parameters.Add("@idno", SqlDbType.VarChar).Value = "A" + DateTime.Now.ToString("MMddHHmmss");
+                    dc.Parameters.Add("@name", SqlDbType.NVarChar).Value = emp.Name;
+                    dc.Parameters.Add("@namezhtw", SqlDbType.NVarChar).Value = emp.Name;
+                    dc.Parameters.Add("@namezhcn", SqlDbType.NVarChar).Value = emp.Name;
+
+                    dc.Connection.Open();
+                    dc.ExecuteNonQuery();
+                    dc.Connection.Close();
+
+                    dc.CommandText = @"INSERT INTO dgemployee(id,personid,empno,enterdate,initdate) VALUES (@id,@personid,@empno,GETDATE(),GETDATE()) ";
+
+                    dc.Parameters.Clear();
+                    dc.Parameters.Add("@id", SqlDbType.UniqueIdentifier).Value = emp.Id;
+                    dc.Parameters.Add("@personid", SqlDbType.UniqueIdentifier).Value = personid;
+                    dc.Parameters.Add("@empno", SqlDbType.NVarChar).Value = emp.Empno;
+
+                    dc.Connection.Open();
+                    dc.ExecuteNonQuery();
+                    dc.Connection.Close();
+                }
+            }
+        }
     }
 }
+
