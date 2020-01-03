@@ -6,26 +6,26 @@
     var n = 0;
 }
 
-<form method="post">
-    <input type="hidden" class="validatemessage" asp-for="ValidateMessage" />
-    <table class="table">
-        <thead>
-            <tr>
-                <td class="align-middle">
-                    <div class="custom-control custom-checkbox">
-                        <input type="checkbox" class="custom-control-input" id="checkall">
-                        <label class="custom-control-label" for="checkall"></label>
-                    </div>
-                </td>
-                <td class="align-middle"><label asp-for="@employeeschema.Empno"></label></td>
-                <td class="align-middle"><label asp-for="@employeeschema.Name"></label></td>
-                <td class="align-middle"><label asp-for="@employeeschema.Email"></label></td>
-                <td class="align-middle"><label>操作</label></td>
-            </tr>
-        </thead>
-        <tbody>
-            @*不行*@
-            @*@foreach (var emp in Model.Employees)
+    <form method="post">
+        <input type="hidden" class="validatemessage" asp-for="ValidateMessage" />
+        <table class="table">
+            <thead>
+                <tr>
+                    <td class="align-middle">
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input" id="checkall">
+                            <label class="custom-control-label" for="checkall"></label>
+                        </div>
+                    </td>
+                    <td class="align-middle"><label asp-for="@employeeschema.Empno"></label></td>
+                    <td class="align-middle"><label asp-for="@employeeschema.Name"></label></td>
+                    <td class="align-middle"><label asp-for="@employeeschema.Email"></label></td>
+                    <td class="align-middle"><label>操作</label></td>
+                </tr>
+            </thead>
+            <tbody>
+                @*不行*@
+                @*@foreach (var emp in Model.Employees)
                 {
                     <tr>
                         <td>
@@ -40,8 +40,8 @@
                     </tr>
                 }*@
 
-            @*可以*@
-            @*@foreach (var emp in Model.Employees)
+                @*可以*@
+                @*@foreach (var emp in Model.Employees)
                 {
                     <tr>
                         <td>
@@ -58,8 +58,8 @@
                     n++;
                 }*@
 
-            @*可以*@
-            @*@for (var i = 0; i < Model.Employees.Count; i++)
+                @*可以*@
+                @*@for (var i = 0; i < Model.Employees.Count; i++)
                 {
                     <tr>
                         <td>
@@ -75,45 +75,48 @@
                 }*@
 
 
-            @for (var i = 0; i < Model.Employees.Count; i++)
-            {
-                <tr>
-                    <td class="d-none">
-                        <input type="hidden" asp-for="Employees[i].Id" />
-                    </td>
-                    <td class="d-none">
-                        <input type="hidden" asp-for="Employees[i].Sex" />
-                    </td>
-                    <td class="d-none">
-                        <input type="hidden" asp-for="Employees[i].Autobiography" />
-                    </td>
-                    <td class="align-middle">
-                        <div class="custom-control custom-checkbox">
-                            <input type="checkbox" class="custom-control-input" id="@String.Format("Employee_{0}_Check",i)" asp-for="Employees[i].Check">
-                            <label class="custom-control-label" for="@String.Format("Employee_{0}_Check",i)" ></label>
-                        </div>
-                    </td>
-                    <td>
-                        <input class="form-control" asp-for="Employees[i].Empno" />
-                    </td>
-                    <td>
-                        <input class="form-control" asp-for="Employees[i].Name" />
-                    </td>
-                    <td>
-                        <input class="form-control" asp-for="Employees[i].Email" />
-                    </td>
-                    <td>
-                        <a class="btn btn-danger" asp-page-handler="DeleteOne" asp-route-eid="@Model.Employees[i].Id">刪除</a>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
-    <button class="btn btn-primary" asp-page-handler="Save1">儲存1</button>
-    <button class="btn btn-primary" asp-page-handler="Save2">儲存2</button>
-    <button class="btn btn-danger batchdelete" asp-page-handler="DeleteBatch" disabled>批次刪除</button>
-    <button class="btn btn-success enabledaccount" asp-page-handler="EnabledAccount" disabled>啟用帳號</button>
-</form>
+                @for (var i = 0; i < Model.Employees.Count; i++)
+                {
+                    <tr>
+                        <td class="d-none">
+                            <input type="hidden" asp-for="Employees[i].Id" />
+                        </td>
+                        <td class="d-none">
+                            <input type="hidden" asp-for="Employees[i].Sex" />
+                        </td>
+                        <td class="d-none">
+                            <input type="hidden" asp-for="Employees[i].Autobiography" />
+                        </td>
+                        <td class="align-middle">
+                            <div class="custom-control custom-checkbox">
+                                @*<input type="checkbox" class="custom-control-input" id="@String.Format("Employee_{0}_Check",i)" asp-for="Employees[i].Check">
+                                <label class="custom-control-label" for="@String.Format("Employee_{0}_Check",i)" ></label>*@
+                                <input type="checkbox" class="custom-control-input" id="@String.Format("Employee_{0}_Check",i)" name="Check[@Model.Employees[i].Id]">
+                                <label class="custom-control-label" for="@String.Format("Employee_{0}_Check",i)"></label>
+                            </div>
+                        </td>
+                        <td>
+                            <input class="form-control" asp-for="Employees[i].Empno" />
+                        </td>
+                        <td>
+                            <input class="form-control" asp-for="Employees[i].Name" />
+                        </td>
+                        <td>
+                            <input class="form-control" asp-for="Employees[i].Email" />
+                        </td>
+                        <td>
+                            <a class="btn btn-danger" asp-page-handler="DeleteOne" asp-route-eid="@Model.Employees[i].Id">刪除</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <button class="btn btn-primary" asp-page-handler="Save1">儲存1</button>
+        <button class="btn btn-primary" asp-page-handler="Save2">儲存2</button>
+        <button class="btn btn-danger batchdelete" asp-page-handler="DeleteBatch" disabled>批次刪除</button>
+        <button class="btn btn-success enabledaccount" asp-page-handler="EnabledAccount" disabled>啟用帳號</button>
+        <button class="btn btn-danger" asp-page-handler="DeleteBatch2">批次刪除(測試)</button>
+    </form>
 
 @section Scripts
 {

@@ -62,6 +62,16 @@ namespace Razor.Training
             return RedirectToPage();
         }
 
+        public IActionResult OnPostDeleteBatch2(Dictionary<Guid,bool> check)
+        {
+            foreach (var emp in check)
+            {
+                new Models.OrgViewModel().DeleteEmployeeData(emp.Key);
+            }
+
+            return RedirectToPage();
+        }
+
         public void OnPostEnabledAccount(List<Models.Employee> employees)
         {
             Employees = employees;
