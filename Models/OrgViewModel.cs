@@ -55,6 +55,27 @@ namespace Razor.Training.Models
         public String Autobiography { get; set; }
 
         public (DateTime?, Guid?) Init { get; set; }
+
+        public List<EmpChangeItem> ChangeItems { get; set; } = new List<EmpChangeItem>();
+    }
+    
+    public class EmpChangeItem
+    {
+        public Guid Id { get; set; }
+
+        public Guid Eid { get; set; }
+
+        [Display(Name = "異動日期")]
+        public DateTime ChgDate { get; set; }
+
+        [Display(Name = "異動欄位")]
+        public String ChgField { get; set; }
+
+        [Display(Name = "新欄位")]
+        public String NewValue { get; set; }
+
+        [Display(Name = "舊欄位")]
+        public String OldValue { get; set; }
     }
 
     public class OrgViewModel

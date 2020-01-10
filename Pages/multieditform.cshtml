@@ -80,19 +80,15 @@
                     <tr>
                         <td class="d-none">
                             <input type="hidden" asp-for="Employees[i].Id" />
-                        </td>
-                        <td class="d-none">
                             <input type="hidden" asp-for="Employees[i].Sex" />
-                        </td>
-                        <td class="d-none">
                             <input type="hidden" asp-for="Employees[i].Autobiography" />
                         </td>
                         <td class="align-middle">
                             <div class="custom-control custom-checkbox">
-                                @*<input type="checkbox" class="custom-control-input" id="@String.Format("Employee_{0}_Check",i)" asp-for="Employees[i].Check">
-                                <label class="custom-control-label" for="@String.Format("Employee_{0}_Check",i)" ></label>*@
-                                <input type="checkbox" class="custom-control-input" id="@String.Format("Employee_{0}_Check",i)" name="Check[@Model.Employees[i].Id]">
-                                <label class="custom-control-label" for="@String.Format("Employee_{0}_Check",i)"></label>
+                                <input type="checkbox" class="custom-control-input" id="@String.Format("Employee_{0}_Check",i)" asp-for="Employees[i].Check">
+                                <label class="custom-control-label" for="@String.Format("Employee_{0}_Check",i)" ></label>
+                                @*<input type="checkbox" class="custom-control-input" id="@String.Format("Employee_{0}_Check",i)" name="Check[@Model.Employees[i].Id]">
+                                <label class="custom-control-label" for="@String.Format("Employee_{0}_Check",i)"></label>*@
                             </div>
                         </td>
                         <td>

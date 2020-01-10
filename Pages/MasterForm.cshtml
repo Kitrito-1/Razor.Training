@@ -1,0 +1,73 @@
+﻿@page
+@model MasterFormModel
+@{
+    var empchageitemschema = new EmpChangeItem();
+    var items = Model.Employee.ChangeItems;
+}
+
+    <form method="post">
+        <input type="hidden" asp-for="Employee.Id" />
+        <div class="form-group">
+            <label class="col-form-label" asp-for="Employee.Empno"></label>
+            <input class="form-control" asp-for="Employee.Empno" />
+        </div>
+        <div class="form-group">
+            <label class="col-form-label" asp-for="Employee.Name"></label>
+            <input class="form-control" asp-for="Employee.Name" />
+        </div>
+        <div class="form-group">
+            <label class="col-form-label" asp-for="Employee.Sex"></label>
+            <select class="form-control" asp-for="Employee.Sex" asp-items="Html.GetEnumSelectList(typeof(Razor.Training.Models.Sex))"></select>
+        </div>
+        <div class="form-group">
+            <label class="col-form-label" asp-for="Employee.EnterDate"></label>
+            <input class="form-control" asp-for="Employee.EnterDate" type="date" />
+        </div>
+        <div class="form-group">
+            <label class="col-form-label" asp-for="Employee.Email"></label>
+            <input class="form-control" asp-for="Employee.Email" />
+        </div>
+
+        <div class="row">
+            <div class="col-3">
+                <div>
+                    <label class="col-form-label" asp-for="@empchageitemschema.ChgDate"></label>
+                </div>
+            </div>
+            <div class="col-3">
+                <div>
+                    <label class="col-form-label" asp-for="@empchageitemschema.ChgField"></label>
+                </div>
+            </div>
+            <div class="col-3">
+                <div>
+                    <label class="col-form-label" asp-for="@empchageitemschema.OldValue"></label>
+                </div>
+            </div>
+            <div class="col-3">
+                <div>
+                    <label class="col-form-label" asp-for="@empchageitemschema.NewValue"></label>
+                </div>
+            </div>
+        </div>
+        @for (var i = 0; i < items.Count; i++)
+        {
+            <div class="row my-3">
+                <div class="col-3">
+                    <input class="form-control" asp-for="@items[i].ChgDate" type="date" />
+                </div>
+                <div class="col-3">
+                    <input class="form-control" asp-for="@items[i].ChgField" />
+                </div>
+                <div class="col-3">
+                    <input class="form-control" asp-for="@items[i].OldValue" />
+                </div>
+                <div class="col-3">
+                    <input class="form-control" asp-for="@items[i].NewValue" />
+                </div>
+            </div>
+        }
+
+        <button class="btn btn-primary" asp-page-handler="Save">儲存</button>
+        <a asp-page="/listview2" class="btn btn-info">回上一頁</a>
+    </form>
